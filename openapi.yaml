@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  title: Sample Go Vercel Serverless Functions 
+  description: |-
+    Vercel Serverless Functions をGo言語で構築したSampleアプリです。
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: sample@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+servers:
+  - url: https://samplegovercel.vercel.app/api
+tags:
+  - name: health
+    description: ヘルスチェック
+  - name: user
+    description: ユーザー管理
+paths:
+  /v1/health:
+    get:
+      tags:
+        - health
+      summary: ヘルスチェック
+      description: ヘルスチェック
+      operationId: v1Health
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+  /v1/users:
+    post:
+      tags:
+        - user
+      summary: ユーザー登録
+      description: ユーザー登録
+      operationId: v1PostUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V1PostUsersRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1PostUsersResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - user
+      summary: ユーザー取得
+      description: ユーザー取得
+      operationId: v1GetUsers
+      parameters:
+        - name: id
+          in: query
+          description: ユーザーID
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1GetUsersResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - user
+      summary: ユーザー更新
+      description: ユーザー更新
+      operationId: v1PutUsers
+      parameters:
+        - name: id
+          in: query
+          description: ユーザーID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V1PutUsersRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1PutUsersResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - user
+      summary: ユーザー削除
+      description: ユーザー削除
+      operationId: v1DeleteUsers
+      parameters:
+        - name: id
+          in: query
+          description: ユーザーID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    V1GetUsersResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - user
+    V1PostUsersRequest:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    V1PostUsersResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - user
+    V1PutUsersRequest:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    V1PutUsersResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - user
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+        name:
+          type: string
+          description: ユーザー名
+      required:
+        - id
+        - name
